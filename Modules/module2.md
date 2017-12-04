@@ -42,16 +42,16 @@ Log into the iWF GUI as the tenant that you previously created. Click around and
 <img src="https://github.com/kreynoldsf5/TechSummit2017iWFLab/blob/master/Modules/images/min4.png" alt="Drawing" style="width: 200px;"/>
 5. Set the 'state' to enabled.
 <img src="https://github.com/kreynoldsf5/TechSummit2017iWFLab/blob/master/Modules/images/min5.png" alt="Drawing" style="width: 200px;"/>
-5. Finally, expand the 'Virtual Server Configuration' section. Assign a 'Virtual Server: name' and a 'Virtual Server: Clientside L4 Protocol Profile'.
+6. Finally, expand the 'Virtual Server Configuration' section. Assign a 'Virtual Server: name' and a 'Virtual Server: Clientside L4 Protocol Profile'.
 <img src="https://github.com/kreynoldsf5/TechSummit2017iWFLab/blob/master/Modules/images/min6.png" alt="Drawing" style="width: 200px;"/>
   
   * The first setting is prevent a small re-entrancy bug with the App Services Integration iApp.
   
   * The second setting is required in order for the iApp to deploy. Like in teh GUI it will assume that the same protocol profile should be used on the serverside as well.
   
-6. What fields are tenant editable? What fields have default values but are not editable? Can you predict what this will look like to a tenant in the GUI when deploying? Can you predict what the POST payload for a L4-L7 service deployment will look like?
+7. What fields are tenant editable? What fields have default values but are not editable? Can you predict what this will look like to a tenant in the GUI when deploying? Can you predict what the POST payload for a L4-L7 service deployment will look like?
 
-7. Just for fun, capture the POST payload when the service template is created using Chrome Dev Tools. 
+8. Just for fun, capture the POST payload when the service template is created using Chrome Dev Tools. 
   * Paste the payload into your favorite text editor. Find the ```vars``` section. 
   * Send the 'GET base iApp template' request in the 'Task 4' folder. Find the ```vars``` section. 
   * Compare these sections.
