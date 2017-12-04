@@ -44,14 +44,25 @@ Log into the iWF GUI as the tenant that you previously created. Click around and
 <img src="https://github.com/kreynoldsf5/TechSummit2017iWFLab/blob/master/Modules/images/min5.png" alt="Drawing" style="width: 200px;"/>
 5. Finally, expand the 'Virtual Server Configuration' section. Assign a 'Virtual Server: name' and a 'Virtual Server: Clientside L4 Protocol Profile'.
 <img src="https://github.com/kreynoldsf5/TechSummit2017iWFLab/blob/master/Modules/images/min6.png" alt="Drawing" style="width: 200px;"/>
+  
   * The first setting is prevent a small re-entrancy bug with the App Services Integration iApp.
+  
   * The second setting is required in order for the iApp to deploy. Like in teh GUI it will assume that the same protocol profile should be used on the serverside as well.
+  
 6. What fields are tenant editable? What fields have default values but are not editable? Can you predict what this will look like to a tenant in the GUI when deploying? Can you predict what the POST payload for a L4-L7 service deployment will look like?
 
+7. Just for fun, capture the POST payload when the service template is created using Chrome Dev Tools. 
+  * Paste the payload into your favorite text editor. Find the ```vars``` section. 
+  * Send the 'GET base iApp template' request in the 'Task 4' folder. Find the ```vars``` section. 
+  * Compare these sections.
+ 
+If you had issues creating the minimal template i've provided a 'Create Minimal Template' request.
+
 ### Task 5: Deploying a Service Template
-The JSON from our example 'minimalist' template was lengthly as it defined all necessary defaults for the underlying iApp. The 'minimalist' component is what is needed from the tenant to instantiate the service template.
-1. Log into the iWF GUI under the tenant account. Click on 'L4-L7 Service -> "+"'. Select the 'Minimalist-template' from the 'L4-L7 Service Template' dropdown. This is the tenant's view of the template -- just the ability to specify a name, what connector to be deployed against, and to configure the virtual server address.
-2. Fill out the form and hit 'Save' capture the payload in the tenant POST. 
+The JSON from our example 'minimal' template was lengthly as it defined all necessary defaults for the underlying iApp. The 'minimalist' component is the POST needed from the tenant to instantiate the service template.
+
+1. Log into the iWF GUI under the tenant account. Click on 'L4-L7 Service -> "+"'. Select the 'MinimalTemplate' from the 'L4-L7 Service Template' dropdown. This is the tenant's view of the template -- just the ability to specify a name, what connector to be deployed against, and to configure the virtual server address.
+2. Fill out the form. Before hitting 'Save' capture the payload in the tenant POST. 
 ```javascript
 {"tenantTemplateReference":{"link":"https://localhost/mgmt/cm/cloud/tenant/templates/iapp/minimalTemplate"},
 "properties":[{"id":"cloudConnectorReference","value":"https://localhost/mgmt/cm/cloud/connectors/local/89800a56-13d3-4a0c-96b7-c2331880705f"}],
@@ -62,63 +73,42 @@ The JSON from our example 'minimalist' template was lengthly as it defined all n
 So after declaring the service ```name```, the template to be used, and which connector to deploy against, the payload specifies the *only* tenant editable value - a ```var``` called ```pool__addr``` and a specified ```value```.
 
 ### Task 6: Build Your Own
-You've seen that a service deployment is simply a POST which specifies the template, the connector, the name, and all necessary tenant editable values. Tenant editable values along with specified defaults from the service template are used to builf the POST payload necessary for the ASO on the target BIG-IP. Let's examine the syntax of the ```overrides``` section of the Service Template. Here is a small section from a service template that uses AFM:
+We've established a service deployment is simply a POST which specifies the iApp template, the connector, the name, and all necessary tenant editable values. Tenant editable values along with specified defaults from the service template are used to build the POST payload necessary for the ASO deployment on the target BIG-IP. Let's examine the syntax of the ```overrides``` section of the Service Template. Here is a small section from our template:
 
 ```javascript
   "overrides": {
     "vars": [
-      {
-        "name": "afm__allowed_addr",
-        "description": "What IP or network addresses should be allowed to access your application?",
-        "displayName": "allowed_addr",
-        "isRequired": true,
-        "provider": ""
-      },
-      {
-        "name": "afm__policy",
-        "description": "Do you want to use BIG-IP AFM to protect your application?",
-        "displayName": "policy",
-        "isRequired": false,
-        "provider": "/#do_not_use#"
-      },
-      {
-        "name": "afm__restrict_by_addr",
-        "description": "Do you want to restrict access to your application by network or IP address?",
-        "displayName": "restrict_by_addr",
-        "isRequired": false,
-        "provider": "/#do_not_use#"
-      },
-      ...
+            {
+                "name": "iapp__strictUpdates",
+                "description": "iApp: Strict Updates",
+                "displayName": "strictUpdates",
+                "isRequired": false,
+                "provider": "enabled"
+            }
+            ...
+            {
+                "name": "pool__addr",
+                "description": "Virtual Server: Address",
+                "displayName": "addr",
+                "isRequired": true,
+                "defaultValue": "",
+                "providerType": "NODE",
+                "serverTier": "default"
+            },
+            ]
 ```
-* ```name``` is the variable name in the iApp.
-* ```description``` is displayed in the iWF GUI. 
-* ```displayName``` is the field name in the iWF GUI. 
-* ```isRequired``` is a self explanatory boolean. 
+#### JSON values from the iApp
+```name``` is the variable name in the iApp.
+```description``` is displayed in the GUI. 
+```displayName``` is the field name in the GUI. 
+```isRequired``` is a self explanatory boolean. 
 
-Whether a field is tenant editable is derived from the ```defaultValue``` field. 
+### JSON values from the service Template
+```provider``` is the defined default value.
+```providerType``` is used for data input validation.
+```serverTier``` dictates whether value is mapped to those few static service tier values.
+```defaultValue``` determines whether the value is tenant editable.
 
-
-The value of ```provider``` is added to the field when displayed and functions as the field's default. If you wanted to add a value to a var that was not tenant edi ```"serverTier": "default"``` can be used to place a field in  
-
-
-
-
-
-
+### Task 6: Build your Own Service Template
 
 
-### Task 5: a Service Template
-Blurb on Service Tier Options
-
-
-a. installation of iApp 
-    1. Discussion of the App Services Integration iApp
-b. GUI creation of service Template
-c. grab the POST payload for the service template creation, make your own template via Postman
-d. Permissions on service template creation
-e. Concept of "service Workers" (cert example)
-
-
-
-
-## Tenant view vs. Administrator view
