@@ -40,7 +40,7 @@ Log into the iWF GUI as the tenant that you previously created. Click around and
 <img src="https://github.com/kreynoldsf5/TechSummit2017iWFLab/blob/master/Modules/images/min3.png" alt="Drawing" style="width: 200px;"/>
 4. Create static entries for pool members according to your docker containers.
 <img src="https://github.com/kreynoldsf5/TechSummit2017iWFLab/blob/master/Modules/images/min4.png" alt="Drawing" style="width: 200px;"/>
-  * be sure to set the 'state' to enabled.
+5. Set the 'state' to enabled.
 <img src="https://github.com/kreynoldsf5/TechSummit2017iWFLab/blob/master/Modules/images/min5.png" alt="Drawing" style="width: 200px;"/>
 5. Finally, expand the 'Virtual Server Configuration' section. Assign a 'Virtual Server: name' and a 'Virtual Server: Clientside L4 Protocol Profile'.
 <img src="https://github.com/kreynoldsf5/TechSummit2017iWFLab/blob/master/Modules/images/min6.png" alt="Drawing" style="width: 200px;"/>
