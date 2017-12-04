@@ -3,10 +3,10 @@
 ## Environment Overview
 
 This Lab assumes a working knowledge of the following:
+- BIG-IP LTM concepts
 - BIG-IP iApps
 - iControl REST API
 - Use of Postman in interact with RESTful APIs
-- BIG-IP LTM/GTM concepts
 - Some understanding of JavaScript (we'll keep this light)
 
 ## Environment Layout
