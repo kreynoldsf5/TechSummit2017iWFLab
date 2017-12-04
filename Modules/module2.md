@@ -106,7 +106,7 @@ We've established a service deployment is simply a POST which specifies the iApp
 
 ```isRequired``` is a self explanatory boolean. 
 
-### JSON values from the service Template
+#### JSON values from the service Template
 ```provider``` is the defined default value.
 
 ```providerType``` is used for data input validation.
@@ -115,6 +115,8 @@ We've established a service deployment is simply a POST which specifies the iApp
 
 ```defaultValue``` determines whether the value is tenant editable.
 
-1. Build your own service template through the GUI.
+1. Build your own service template and then deploy a L4-L7 service. 
+
+The easiest way would be to build the template through the GUI, perform a deployment as a tenant, and capture the JSON payload. The hard (fun) was 
 
 
