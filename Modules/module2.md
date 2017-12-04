@@ -99,16 +99,22 @@ We've established a service deployment is simply a POST which specifies the iApp
 ```
 #### JSON values from the iApp
 ```name``` is the variable name in the iApp.
+
 ```description``` is displayed in the GUI. 
+
 ```displayName``` is the field name in the GUI. 
+
 ```isRequired``` is a self explanatory boolean. 
 
 ### JSON values from the service Template
 ```provider``` is the defined default value.
+
 ```providerType``` is used for data input validation.
+
 ```serverTier``` dictates whether value is mapped to those few static service tier values.
+
 ```defaultValue``` determines whether the value is tenant editable.
 
-### Task 6: Build your Own Service Template
+1. Build your own service template through the GUI.
 
 
