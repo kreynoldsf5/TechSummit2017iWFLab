@@ -1,14 +1,17 @@
 # Module 2:  Service Templates
 
-An iApp template can be uploaded to iWF in several ways. In the GUI you can provide the TMPL files through pasting or uploaded. APL needs to be provided via JSON and can be uploaded, pasted, or retrieved from an existing BIG-IP. The entire iApp template can provided in a single upload via JSON. The necessary JSON is packaged in the Github repository for the Integration Service iApp (https://github.com/F5Networks/f5-application-services-integration-iApp/releases). The 'iWorkflow JSON Payloads' zip archive is provided in the Lab repository.
+An iWF 'Service Template' serves as a layer of abstraction on top of BIG-IP Application Service Object deployments. The service template defines what values of an iApp deployment are editable by a tenant, default values whether these values are editable or not, and the destination connector for the deployment. Additionally, interaction with this interface is fronted by fine grained RBAC.
+
+
+Service templates are built on top of iApp templates. An iApp template can be uploaded to iWF in several ways. In the GUI you can provide the TMPL files through pasting or uploaded. APL needs to be provided via JSON and can be uploaded, pasted, or retrieved from an existing BIG-IP. The entire iApp template can provided in a single upload via JSON. The necessary JSON is packaged in the Github repository for the App Services Integration iApp (https://github.com/F5Networks/f5-application-services-integration-iApp/releases). This archive includes JSON for the iApp, usable common service templates based on this iApp, and example POST bodies for L4-L7 service deployments. The 'iWorkflow JSON Payloads' zip archive has been extracted in the Lab repository.
 
 ### Task 1: Upload iApp Template
 
-A request is provided in the Postman folder 'Task 1: Upload Integration Services iApp' folder under this module. In the alternative, feel free to upload the template via the GUI by navigating to 'Clouds and Service -> iApps Templates -> "+". For the 'Import Method' select 'Use pre existing JSON' and 'import JSON'. Under the 'Choose File' dialogue select ```{{repo}/iWorkflow_json_payloads_v2.0-5.004/import-json/iWorkflow_appsvcs_integration_v2.0.004.json```.
+A request is provided in the Postman folder 'Task 1: Upload Integration Services iApp' folder under this module. In the alternative, feel free to upload the template via the GUI by navigating to 'Clouds and Service -> iApps Templates -> "+". For the 'Import Method' select 'Use pre existing JSON' and 'import JSON'. Under the 'Choose File' dialogue select ```{{repo}}/iWorkflow_json_payloads_v2.0-5.004/import-json/iWorkflow_appsvcs_integration_v2.0.004.json```.
 
 ### Task 2: Upload pre-existing service templates
 
-The iWorkflow_json_payloads archive provides several pre-existing service templates which reference the Integration Services iApp.
+The iWorkflow_json_payloads archive provides several pre-existing service templates which reference the App Services Integration iApp.
 
 1. Send the request to 'Create the f5-http-lb Service Template'.
 2. Send the request to 'Create the f5-fastl4-tcp-lb Service Template'.
@@ -21,7 +24,7 @@ Log into the iWF GUI as the tenant that you previously created. Click around and
 2. Send the 'List Deployed Services" requests (both 'Virtual Servers & Pool Members' as well as 'Nodes'). We have not yet deployed a L4-L7 service so the ```items``` array is blank (```[]```).
 3. Send 'List Deployed Services: L4-L7 Services' to verify that we currently have no deployed services.
 4. Send the 'Deploy Temporary L4-L7 Service'. Don't worry about the POST payload for this service deployment at this time.
-5. Resend the requests for 'List deployed Services:*'. Notice how the tenant can now see all objects (Virtuals, Nodes, Pool Members, and Service Deployments) for this tenant.
+5. Resend the requests for 'List deployed Services: '. Notice how the tenant can now see all objects (Virtuals, Nodes, Pool Members, and Service Deployments) for this tenant.
 6. Send the request for 'View Tenant L4-L7 Service Stats'. Scroll down (or find) health.summary JSON objects. 
   * Is your Application Service healthy? 
   * If not, can you fix it with a PATCH?
@@ -29,23 +32,21 @@ Log into the iWF GUI as the tenant that you previously created. Click around and
 
 ### Task 4: Build a Service Template 
 
-
-1. In the GUI logged in as 'admin', navigate to 'Clouds and Services -> Service Templates -> "+"'. Select the Integration Service iApp as the template and select the appropiate version. Name your template. In this exercise we are going to create a minimalist service template for demonstration purposes.
-LINK
+1. In the GUI logged in as 'admin', navigate to 'Clouds and Services -> Service Templates -> "+"'. Select the App Services Integration iApp as the template and select the appropiate version. Name your template. In this exercise we are going to create a minimalist service template for demonstration purposes.
+<img src="https://github.com/kreynoldsf5/TechSummit2017iWFLab/blob/master/Modules/images/min1.png" alt="Drawing" style="width: 200px;"/>
 2. Fill out the service tier information.
-3. Expand the 'Virtual Server Listener & Pool Configuration' section.
+<img src="https://github.com/kreynoldsf5/TechSummit2017iWFLab/blob/master/Modules/images/min2.png" alt="Drawing" style="width: 200px;"/>
+3. Expand the 'Virtual Server Listener & Pool Configuration' section. Make the 'Virtual Server: Address' tenant editable.
+<img src="https://github.com/kreynoldsf5/TechSummit2017iWFLab/blob/master/Modules/images/min3.png" alt="Drawing" style="width: 200px;"/>
 4. Create static entries for pool members according to your docker containers.
-LINK
-  * be sure to include 'state
-LINK
-<Several pictures here>
-5. 
-
-Note the fields which are tenant editable.
-
-Note the fields where defaults are displayed but are not editable.
-
-
+<img src="https://github.com/kreynoldsf5/TechSummit2017iWFLab/blob/master/Modules/images/min4.png" alt="Drawing" style="width: 200px;"/>
+  * be sure to set the 'state' to enabled.
+<img src="https://github.com/kreynoldsf5/TechSummit2017iWFLab/blob/master/Modules/images/min5.png" alt="Drawing" style="width: 200px;"/>
+5. Finally, expand the 'Virtual Server Configuration' section. Assign a 'Virtual Server: name' and a 'Virtual Server: Clientside L4 Protocol Profile'.
+<img src="https://github.com/kreynoldsf5/TechSummit2017iWFLab/blob/master/Modules/images/min6.png" alt="Drawing" style="width: 200px;"/>
+  * The first setting is prevent a small re-entrancy bug with the App Services Integration iApp.
+  * The second setting is required in order for the iApp to deploy. Like in teh GUI it will assume that the same protocol profile should be used on the serverside as well.
+6. What fields are tenant editable? What fields have default values but are not editable? Can you predict what this will look like to a tenant in the GUI when deploying? Can you predict what the POST payload for a L4-L7 service deployment will look like?
 
 ### Task 5: Deploying a Service Template
 The JSON from our example 'minimalist' template was lengthly as it defined all necessary defaults for the underlying iApp. The 'minimalist' component is what is needed from the tenant to instantiate the service template.
