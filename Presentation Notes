@@ -1,0 +1,46 @@
+Environment Build
+
+
+
+
+
+UDF ENV CHANGES
+1. upload all iControlLX workers needed
+     a. Helloworld.js
+     b. skeletonWorker.js
+     c. MemoryWorker.js
+     d. my-first
+     e. the docker one if finished
+2. The RPMs needed for the clustering/automation extensions
+3. iRule and data group needed for IPAM extensions
+    a. Do this in a service template
+
+
+
+
+Module 1 -- Accessing the Lab
+a. UDF Overview
+
+
+Module 2 -- 
+a. Device Discovery
+b. Creation of Roles and tenants
+    1. Admin view vs. Tenant view
+
+Module 3 -- Service Template Creation
+a. installation of iApp 
+    1. Discussion of the App Services Integration iApp
+b. GUI creation of service Template
+c. grab the POST payload for the service template creation, make your own template via Postman
+d. Permissions on service template creation
+e. Concept of "service Workers" (cert example)
+
+
+Module 4 - iControlLX worker examples
+a. create the RPM, install the RPM
+b. restWorker
+c. RBAC on extensions
+d. Overview of RestWorker
+
+
+Module X -- Onboarding iControlLX Worker
