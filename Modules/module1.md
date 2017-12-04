@@ -4,6 +4,8 @@
 
 <img src="https://github.com/kreynoldsf5/TechSummit2017iWFLab/blob/master/Modules/images/L4-L7_Service_Creation_diagram.jpg" alt="Drawing" style="width: 100px;"/>
 
+Administrators and tenants have very different tasks they can perform in an iWF environment. 
+
 ### iWF Administrator Tasks:
 * Discover BIG-IP devices
 * Assign device(s) to 'connectors' (sometimes referred to as 'clouds')
