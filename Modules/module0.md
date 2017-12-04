@@ -7,7 +7,7 @@ This Lab assumes a working knowledge of the following:
 - BIG-IP iApps
 - iControl REST API
 - Use of Postman in interact with RESTful APIs
-- Some understanding of JavaScript (we'll keep this light)
+- Minimal understanding of JavaScript
 
 ## Environment Layout
 The UDF hosted Lab environment consists of two BIG-IP devices (TMOS 12.1.1), one iWorkflow device (iWF 2.3), an ubuntu server (14.01 LTS) running docker, and a Window jump host. All tools needed for the lab can be found on the Windows jump host (putty, winSCP, Postman, etc.). The Lab consists of a Management network, an Application network, and a VIP network. 
@@ -20,27 +20,30 @@ The UDF hosted Lab environment consists of two BIG-IP devices (TMOS 12.1.1), one
 | Windows           | 10.1.1.7     | 10.1.100.7 | 10.1.200.7     |
 | bip2.ts2017.local | 10.2.1.8     | 10.1.100.8 | 10.1.200.8     |
 
-Account information for various hosts is available in the UDF for the Windows jump host and on the desktop of the jump host for the other devices. Sessions using ssh keys for Putty and WinSCP have been created (use the 'admin' user). Log into the [UDF](https://udf.f5.com) now. This will require MFA. Search for our lab ("Tech Summit iWF Lab") under "Blueprints".
+Account information for various hosts is available in the UDF for the Windows jump host and on the desktop of the jump host for the other devices. SSH sessions using ssh keys for Putty and WinSCP have been created (use the 'admin' user). Log into the [UDF](https://udf.f5.com) now. This will require MFA. Search for our lab ("GSTS 2017 iWorkflow and iControl LX Lab") under "Courses".
 
-**Please go ahead and start the deployment now as the F5 devices will take some time (5-6 min) to boot. Verify you have access to "iWF.ts2017.local" and "bip1.ts.2017.local."**
+**Please go ahead and start the deployment now as the F5 devices will take some time (5-6 min) to boot.**
 
 ## Preliminary Tasks
 ### Log into your Windows Jump Host
-1. Grab an RDP link from the UDF link. The 'Administrator' credentials will be on the 'Details' tab.
+1. Grab an RDP link from 'Systems -> Details' for the jump host. The 'Administrator' credentials will be on the 'Details' tab.
 2. Open Chrome and click on the kreynoldsf5/TechSummit2017iWFLab link. This repo contains all the materials needed for the lab.
   * Download the repository as unzip it on the desktop.
   * View the Lab Guides under the 'modules' directory. These are all in markdown and will display nicely on Github. 
-  * Feel free to clone the repo locally instead of on the Windows jump host) if that's easier.
+  * Feel free to clone the repo locally instead of on the Windows jump host if that's easier.
 3. Verify Access to your Lab BIG-IPs/iWF devices. 
   * I have saved SSH sessions for Putty and WinSCP on the windows jump host for BIGIP-A and iWF (you won't need SSH access to BIGIP-B). Use the 'admin' user and key based auth should _just work_.
  * There are bookmarks to BIGIP-A and iWF in Chrome. I'll give you the admin credentials as those are removed on a per 'deployment' basis in UDF. 
 
 ### Postman
 1. If you're not familiar with Postman let me know and we'll spend a few minutes covering the tool.
-2. Import the Postman Environment from the repo.
-3. Fill in the Postman environment variables which were not included in the collection. This mainly includes passwords.
-4. Note the use of variable substitution using the {{variable}} nomenclature.
-5. Look at the 'Tests' tab for requests that assign variable values based on HTTP responses. This is simple JavaScript.
+2. Import the Postman Collection from the repo.
+3. Import the Postman Environment from the repo.
+4. Fill in the Postman environment variables which were not included in the collection.
+  * {{iwf_admin_password}}
+  * {{big_admin_password}}
+5. Note how Postman performs variable substitution using the {{variable}} nomenclature. You'll see this frequently in request URIs and request body payloads.
+6. Look at the 'Tests' tab for requests that assign variable values based on HTTP responses. This is simple JavaScript.
 
 ### Docker Pool Members
 Start a couple docker pool members based on the F5Devcentral/F5-Demo-App container. 
