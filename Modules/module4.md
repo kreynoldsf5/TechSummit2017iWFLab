@@ -6,7 +6,7 @@ PD currently provides two iControl LX extensions designed to be used for onbaoar
 
 [BIG-IP Cluster](https://devcentral.f5.com/wiki/DevOps.HowToSamples-create-bigip-cluster.ashx)
 
-These packages can be installed on a BIG-IP device or an iWF device. We'll use our iWF device for this Lab. Due to limitations in the UDF we can't walk through the BIG-IP Clustering extension. These extensions use the '/iapps/block' interface which, although functionally similiar, is a more feature filled pattern than the 'tasks' pattern we've seen in our previous examples.
+These packages can be installed on a BIG-IP device or an iWF device. We'll use our iWF device for this Lab. Due to limitations in the UDF we can't walk through the BIG-IP Clustering extension. These extensions use the 'block' interface which, although functionally similiar, is a more feature filled pattern than the 'tasks' pattern we've seen in our previous examples.
 
 Our target device for this exercise will be the BIGIP-2 device in our environment.
 
