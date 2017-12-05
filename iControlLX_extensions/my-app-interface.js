@@ -7,7 +7,7 @@ var DEBUG = true;
 var WorkerName = "my-app-interface";
 var IWF_IP = "10.1.1.4";
 var IPAM_IP = "10.1.200.79";
-var IPAM_Port = "79";
+var IPAM_Port = "80";
 var http = require('http');
 var tenantName = "TStenant";
 
