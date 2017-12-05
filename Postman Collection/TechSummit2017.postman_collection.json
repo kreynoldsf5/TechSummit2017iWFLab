@@ -594,7 +594,7 @@
 											"tests[\"response has connectorId: \" +respData.connectorId] = respData.connectorId;",
 											"",
 											"postman.setEnvironmentVariable('TS_connectorId',respData.connectorId);",
-											"postman.setEnvironmentVariable('deviceGroupReference',respData.deviceGroupReference.link);"
+											"postman.setEnvironmentVariable('connectorReference',respData.selfLink);"
 										]
 									}
 								}
@@ -641,7 +641,8 @@
 									"script": {
 										"type": "text/javascript",
 										"exec": [
-											"tests[\"Status code is 200\"] = responseCode.code === 200;"
+											"tests[\"Status code is 200\"] = responseCode.code === 200;",
+											""
 										]
 									}
 								}
@@ -695,7 +696,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"cloudConnectorReferences\": [\n        {\"link\":\"{{deviceGroupReference}}\"}\n    ]\n}"
+									"raw": "{\n    \"cloudConnectorReferences\": [\n        {\"link\":\"{{connectorReference}}\"}\n    ]\n}\n"
 								},
 								"url": {
 									"raw": "https://{{iwf_mgmt}}/mgmt/cm/cloud/tenants/{{iwf_tenant}}",
