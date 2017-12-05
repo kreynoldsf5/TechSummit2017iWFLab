@@ -1,10 +1,10 @@
-# Module 1: iWorkflow Setup
+# Module 1: iWorkflow Object Module
 
-## iWorkflow Object Model
+## Provider/Tenant Model
 
 <img src="https://github.com/kreynoldsf5/TechSummit2017iWFLab/blob/master/Modules/images/L4-L7_Service_Creation_diagram.jpg" alt="Drawing" style="width: 100px;"/>
 
-Administrators and tenants have very different tasks they can perform in an iWF environment. 
+Administrators and tenants have a very different view and abilities an iWF environment. 
 
 ### iWF Administrator Available Tasks:
 * Discover BIG-IP devices
