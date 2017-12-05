@@ -1,4 +1,4 @@
-# Module 1: iWorkflow General
+# Module 1: iWorkflow Setup
 
 ## iWorkflow Object Model
 
