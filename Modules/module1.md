@@ -74,7 +74,7 @@ A connector is a target for service deployments made up of BIG-IP(s). In our cas
 
 2. In the GUI, the connector you just created is under the 'Clouds' pane. There is history here dating back to Big-IQ Cloud days. 
 
-3. Use the followup GET request, 'Get Local Connectors', to find the ```connectorId``` and the ```deviceGroupReference``````link``` of the returned connector. Note the GUID naming scheme (connector+{{guid}} in this case).
+3. Use the followup GET request, 'Get Local Connectors', to find the ```connectorId``` and the ```deviceGroupReference``` ```link``` of the returned connector. Note the GUID naming scheme (connector+{{guid}} in this case).
 
 4. Finally, assign the connector to the tenant you created earlier with 'Assign Connector to Tenant'. The 'cloudConnectorReferences' JSON array could be used to assign multiple connectors to a given tenant.
 
