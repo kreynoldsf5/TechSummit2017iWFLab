@@ -6,7 +6,7 @@
 
 Administrators and tenants have very different tasks they can perform in an iWF environment. 
 
-### iWF Administrator Tasks:
+### iWF Administrator Available Tasks:
 * Discover BIG-IP devices
 * Assign device(s) to 'connectors' (sometimes referred to as 'clouds')
 * Create 'Tenants'
@@ -16,10 +16,11 @@ Administrators and tenants have very different tasks they can perform in an iWF 
 * Create 'Service Templates' 
 * Allow Service Templates to be used by one or more tenant
 
-### iWF Tenants
+### iWF Tenants Available Tasks:
 * Deploy 'L4-L7 Services' from service templates to allowed connectors
   * Tenants only see connectors -- not BIG-IP devices
-* The collection of service templates available to a tenant is often referred to as the "Service Catalog".
+  * The collection of service templates available to a tenant is often referred to as the "Service Catalog".
+* Update your own User's password
   
 _iWF Administrators do not have the ability to delete L4-L7 services. This *must* be done by the tenant._
 
