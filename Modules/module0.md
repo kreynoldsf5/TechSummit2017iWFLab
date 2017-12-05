@@ -41,7 +41,7 @@ Account information for various hosts is available in the UDF for the Windows ju
 2. Import the Postman Collection from the repo.
   * 'File' -> 'Import' and then drag the 'TechSummit2017.postman_collection.json' file from the 'Postman Collection' directory in the repository.
 3. Import the Postman Environment from the repo.
-  * 'File' -> 'Import' and then drag the 'TechSummit2017.postman_collection.json' file from the 'Postman Collection' directory in the repository.
+  * 'File' -> 'Import' and then drag the 'TechSummit2017Env.postman_environment.json' file from the 'Postman Collection' directory in the repository.
 4. Select the environment you imported from the drop down in the top right of the window. Fill in the Postman environment variables which were not included in the environment collection by clicking the "eye" and then 'Edit'.
   * {{iwf_admin_password}}
   * {{big_admin_password}}
