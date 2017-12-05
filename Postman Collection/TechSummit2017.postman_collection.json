@@ -339,7 +339,7 @@
 											"tests[\"response has uuid: \" +respData.uuid] = respData.uuid;",
 											"",
 											"postman.setEnvironmentVariable('bigip2_uuid',respData.uuid);",
-											"postman.setEnvironmentVariable('bipip2_device_selfLink', respData.selfLink);"
+											"postman.setEnvironmentVariable('bigip2_device_selfLink', respData.selfLink);"
 										]
 									}
 								}
@@ -595,6 +595,54 @@
 											"",
 											"postman.setEnvironmentVariable('TS_connectorId',respData.connectorId);",
 											"postman.setEnvironmentVariable('connectorReference',respData.selfLink);"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "X-F5-Auth-Token",
+										"value": "{{iwf_admin_token}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\":\"TS BIG-IP Connector\",\n    \"description\":\"Local Connector for the BIGIP-1 device.\",\n    \"deviceReferences\": [\n        {\"link\":\"https://localhost/mgmt/shared/resolver/device-groups/cm-cloud-managed-devices/devices/{{bigip1_uuid}}\"}\n    ]\n}"
+								},
+								"url": {
+									"raw": "https://{{iwf_mgmt}}/mgmt/cm/cloud/connectors/local",
+									"protocol": "https",
+									"host": [
+										"{{iwf_mgmt}}"
+									],
+									"path": [
+										"mgmt",
+										"cm",
+										"cloud",
+										"connectors",
+										"local"
+									]
+								},
+								"description": null
+							},
+							"response": []
+						},
+						{
+							"name": "Create Unused Local Connector",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"tests[\"Status code is 200\"] = responseCode.code === 200;",
+											""
 										]
 									}
 								}
@@ -1676,7 +1724,11 @@
 									"script": {
 										"type": "text/javascript",
 										"exec": [
-											"tests[\"Status code is 200\"] = responseCode.code === 200;"
+											"tests[\"Status code is 200\"] = responseCode.code === 200;",
+											"",
+											"var respData = JSON.parse(responseBody);",
+											"",
+											"postman.setEnvironmentVariable(\"CreateDeploymentName\", respData.name)"
 										]
 									}
 								}
@@ -1773,7 +1825,7 @@
 					"description": "",
 					"item": [
 						{
-							"name": "Deploy the Build Your Own Template",
+							"name": "Deploy the 'Build Your Own Template' Service",
 							"event": [
 								{
 									"listen": "test",
@@ -2430,7 +2482,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"name\": \"iCLXextensionRole\",\n    \"displayName\": \"iControl LX extension Role\",\n    \"userReferences\": [\n        {\n            \"link\": \"https://localhost/mgmt/shared/authz/users/{{iwf_tenant_username}}\"\n        }\n    ],\n\t\"resources\": [\n\t    {\n\t         \"resourceMask\": \"/mgmt/shared/ts2017/{{extension_name}}/*\",\n\t         \"restMethod\": \"GET\"\n\t    }\n\t  ]\n}\n"
+									"raw": "{\n    \"name\": \"iCLXextensionRole\",\n    \"displayName\": \"iControl LX extension Role\",\n    \"userReferences\": [\n        {\n            \"link\": \"https://localhost/mgmt/shared/authz/users/{{iwf_tenant_username}}\"\n        }\n    ],\n\t\"resources\": [\n\t    {\n\t         \"resourceMask\": \"/mgmt/shared/ts2017/memory\",\n\t         \"restMethod\": \"GET\"\n\t    }\n\t  ]\n}\n"
 								},
 								"url": {
 									"raw": "https://{{iwf_mgmt}}/mgmt/shared/authz/roles/",
@@ -2850,7 +2902,7 @@
 									"response": []
 								},
 								{
-									"name": "GET HTTP Service ",
+									"name": "GET HTTP Service (worker)",
 									"event": [
 										{
 											"listen": "test",
@@ -2889,6 +2941,55 @@
 												"shared",
 												"ts2017",
 												"my-app-interface",
+												"{{my-app-name}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "GET HTTP Service (deployment)",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"type": "text/javascript",
+												"exec": [
+													"tests[\"Status code is 200\"] = responseCode.code === 200;"
+												]
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "X-F5-Auth-Token",
+												"value": "{{iwf_token}}"
+											},
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n\t\"tenantTemplateReference\": {\n\t\t\"link\": \"{{CreateTemplateSelf}}\"\n\t},\n\t\"properties\": [{\n\t\t\"id\": \"cloudConnectorReference\",\n\t\t\"value\": \"{{TenantViewConnectorSelf}}\"\n\t}],\n\t\"tables\": [],\n\t\"vars\": [{\n\t\t\"name\": \"pool__addr\",\n\t\t\"value\": \"10.1.200.56\"\n\t}],\n\t\"name\": \"minService\"\n}"
+										},
+										"url": {
+											"raw": "https://{{iwf_mgmt}}/mgmt/cm/cloud/tenants/{{iwf_tenant}}/services/iapp/{{my-app-name}}",
+											"protocol": "https",
+											"host": [
+												"{{iwf_mgmt}}"
+											],
+											"path": [
+												"mgmt",
+												"cm",
+												"cloud",
+												"tenants",
+												"{{iwf_tenant}}",
+												"services",
+												"iapp",
 												"{{my-app-name}}"
 											]
 										}
@@ -2935,51 +3036,6 @@
 												"shared",
 												"ts2017",
 												"my-app-interface"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "GET HTTP Service ",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"type": "text/javascript",
-												"exec": [
-													"tests[\"Status code is 200\"] = responseCode.code === 200;"
-												]
-											}
-										}
-									],
-									"request": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "X-F5-Auth-Token",
-												"value": "{{iwf_token}}"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\n  \"name\": \"{{my-app-name}}\",\n  \"template\" : \"f5-http-lb\",\n  \"vars\": [\n                {\n                    \"name\": \"pool__port\",\n                    \"value\": \"{{service-port}}\"\n                }\n    ],\n    \"tables\": [{\n        \"name\": \"pool__Members\",\n        \"columns\": [\n            \"IPAddress\",\n            \"State\"\n        ],\n        \"rows\": [\n          [ \n            \"{{server1-addr}}\",\n            \"enabled\"\n          ], [\n            \"{{server2-addr}}\",\n            \"enabled\"\n          ]\n        ]\n    }]\n}"
-										},
-										"url": {
-											"raw": "https://{{iwf_mgmt}}/mgmt/shared/my-app-interface/{{my-app-name}}",
-											"protocol": "https",
-											"host": [
-												"{{iwf_mgmt}}"
-											],
-											"path": [
-												"mgmt",
-												"shared",
-												"my-app-interface",
-												"{{my-app-name}}"
 											]
 										}
 									},
@@ -3459,7 +3515,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": " {\n    \"name\": \"TSexample-new-settings\",\n    \"inputProperties\": [\n    {\n        \"id\": \"deviceReference\",\n        \"type\": \"REFERENCE\",\n        \"value\": {\n          \"link\": \"http://localhost/mgmt/shared/resolver/device-groups/iapplx-group/devices/54d93122-d694-4ac7-a78a-d3c5423bb40a\"\n        }\n    },\n    {\n        \"id\": \"resetToDefaults\",\n        \"type\": \"BOOLEAN\",\n        \"value\": false\n    },\n    {\n      \"id\": \"hostname\",\n      \"type\": \"STRING\",\n      \"value\": \"test-bigip7.example.com\"\n    },\n    {\n        \"id\" : \"displaySetup\",\n        \"type\": \"BOOLEAN\",\n        \"value\": false\n    },\n    {\n      \"id\": \"license\",\n      \"type\": \"PROPERTIES\",\n      \"value\": [\n        {\n          \"id\": \"baseRegKey\",\n          \"type\": \"STRING\",\n          \"value\": \"\"\n        },\n        {\n         \"id\": \"addOnKeys\",\n         \"type\": \"JSON\",\n         \"value\": []\n        },\n        {\n          \"id\": \"dossier\",\n          \"type\": \"STRING\"\n        },\n        {\n          \"id\": \"eulaText\",\n          \"type\": \"STRING\",\n          \"value\": \"\"\n        },\n        {\n          \"id\": \"acceptEula\",\n          \"type\": \"BOOLEAN\",\n          \"value\": false\n        }\n      ]\n    },\n    {\n      \"id\": \"ntp\",\n      \"type\": \"PROPERTIES\",\n      \"value\": [\n        {\n          \"id\": \"servers\",\n          \"type\": \"JSON\",\n          \"value\": [\n            \"172.27.64.50\"\n          ]\n        },\n        {\n          \"id\": \"timezone\",\n          \"type\": \"STRING\",\n          \"value\": \"America/Los_Angeles\"\n        }\n      ]\n    },\n    {\n      \"id\": \"dns\",\n      \"type\": \"PROPERTIES\",\n      \"value\": [\n        {\n          \"id\": \"servers\",\n          \"type\": \"JSON\",\n          \"value\": [\n            \"172.27.64.50\"\n          ]\n        },\n        {\n          \"id\": \"search\",\n          \"type\": \"JSON\",\n          \"value\": [\n            \"localhost\"\n          ]\n        }\n      ]\n    },\n    {\n      \"id\": \"syslog\",\n      \"type\": \"PROPERTIES\",\n      \"value\": [\n        {\n          \"id\": \"servers\",\n          \"type\": \"JSON\",\n          \"value\": []\n        }\n      ]\n    }\n  ],\n    \"configurationProcessorReference\": {\n        \"link\": \"https://localhost/mgmt/shared/iapp/processors/bigip-settings-config\"\n    },\n    \"configProcessorTimeoutSeconds\": 200,\n    \"state\": \"BINDING\"\n}"
+							"raw": " {\n    \"name\": \"TSexample-new-settings\",\n    \"inputProperties\": [\n    {\n        \"id\": \"deviceReference\",\n        \"type\": \"REFERENCE\",\n        \"value\": {\n          \"link\": \"{{bigip2_device_selfLink}}\"\n        }\n    },\n    {\n        \"id\": \"resetToDefaults\",\n        \"type\": \"BOOLEAN\",\n        \"value\": false\n    },\n    {\n      \"id\": \"hostname\",\n      \"type\": \"STRING\",\n      \"value\": \"test-bigip7.example.com\"\n    },\n    {\n        \"id\" : \"displaySetup\",\n        \"type\": \"BOOLEAN\",\n        \"value\": false\n    },\n    {\n      \"id\": \"license\",\n      \"type\": \"PROPERTIES\",\n      \"value\": [\n        {\n          \"id\": \"baseRegKey\",\n          \"type\": \"STRING\",\n          \"value\": \"\"\n        },\n        {\n         \"id\": \"addOnKeys\",\n         \"type\": \"JSON\",\n         \"value\": []\n        },\n        {\n          \"id\": \"dossier\",\n          \"type\": \"STRING\"\n        },\n        {\n          \"id\": \"eulaText\",\n          \"type\": \"STRING\",\n          \"value\": \"\"\n        },\n        {\n          \"id\": \"acceptEula\",\n          \"type\": \"BOOLEAN\",\n          \"value\": false\n        }\n      ]\n    },\n    {\n      \"id\": \"ntp\",\n      \"type\": \"PROPERTIES\",\n      \"value\": [\n        {\n          \"id\": \"servers\",\n          \"type\": \"JSON\",\n          \"value\": [\n            \"172.27.64.50\"\n          ]\n        },\n        {\n          \"id\": \"timezone\",\n          \"type\": \"STRING\",\n          \"value\": \"America/Los_Angeles\"\n        }\n      ]\n    },\n    {\n      \"id\": \"dns\",\n      \"type\": \"PROPERTIES\",\n      \"value\": [\n        {\n          \"id\": \"servers\",\n          \"type\": \"JSON\",\n          \"value\": [\n            \"172.27.64.50\"\n          ]\n        },\n        {\n          \"id\": \"search\",\n          \"type\": \"JSON\",\n          \"value\": [\n            \"localhost\"\n          ]\n        }\n      ]\n    },\n    {\n      \"id\": \"syslog\",\n      \"type\": \"PROPERTIES\",\n      \"value\": [\n        {\n          \"id\": \"servers\",\n          \"type\": \"JSON\",\n          \"value\": []\n        }\n      ]\n    }\n  ],\n    \"configurationProcessorReference\": {\n        \"link\": \"https://localhost/mgmt/shared/iapp/processors/bigip-settings-config\"\n    },\n    \"configProcessorTimeoutSeconds\": 200,\n    \"state\": \"BINDING\"\n}"
 						},
 						"url": {
 							"raw": "https://{{iwf_mgmt}}/mgmt/shared/iapp/blocks/",
