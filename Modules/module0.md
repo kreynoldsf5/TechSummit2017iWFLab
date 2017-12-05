@@ -64,6 +64,16 @@ ad535dc106f0        djenriquez/sherpa          "./main --allow"    6 days ago   
 ```
 In this example the pool members' ports will be 32768 and 32769. If your ports differ, update the Postman environment variables for 'pool_member1_port' and 'pool_member2_port'.
 
+### iControl REST Hints
+
+You can view the API's layout, and interact if you wish, in a browser with an HTML based representation via the following URL:
+
+https://{{iwf_mgmt}}/mgmt/toc
+
+Notice how URIs that would otherwise just be REST endpoints are rendered in HTML when ```/presentation#/``` is appended to the URI. You can also see the JSON body of the resource by clicking 'advanced'.
+
+Unlike BIG-IP, iWF's GUI is _completely_ driven by REST calls. This means if you are trying to figure out the appropriate URI for a resource or the proper JSON payload for a change walk through the operation you are trying to perform in the GUI and capture the HTTP request/response pairs. Chrome Developer tools is available on the Windows jump host.
+
 
 
 
