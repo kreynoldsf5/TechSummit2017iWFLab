@@ -12,7 +12,7 @@ Several sample iControlLX extensions are provided in the repository:
   * my-app-interface.js - monolithic example from [Nicolas Menant](https://github.com/nmenant/iControl_LX_Lab) which retrieves destination IP from IPAM, deploys a service template.
 
 ### Task1 - build HelloWorld.js extension
-1. Make the directory from which the extension will be built on your iWF device. 
+1. Make the directory from which the extension will be built on your iWF device. SSH to your iWF device and drop to bash.
   * ```mkdir -p /var/config/rest/iapps/Helloworld/nodejs```
 2.  SCP the JavaScript files to the build directory
   * Use winSCP on the windows jump host or SCP from elsewhere to cp {{repo}}/iControlLX_extensions/Helloworld.js to the build directory
@@ -20,7 +20,7 @@ Several sample iControlLX extensions are provided in the repository:
    * ```tailf /var/log/restnoded/restnoded.log```
    
 4. Open the module 3 Postman collection, 'Task 1: Build RPM' folder.
-5. Set/verify the Postman environment variable {{extension_name}} is set to the build directory name (just the dir name -- not the full path) you created earlier.
+5. Set/verify the Postman environment variable {{extension_name}} is set to the build directory name (just the directory name -- not the full path) you created earlier.
 6. Send the 'Create RPM on iWF' request. This procedure follows the 'tasks' pattern (the initial ```status``` will be "CREATED").
 7.  Send the 'Check RPM Creation Process' request. Notice the URL ends with the ```id``` from the 'Create' task. Evaluate the ```step``` and ```status``` values from this request.
 
@@ -38,18 +38,20 @@ Several sample iControlLX extensions are provided in the repository:
 
 ### Task 3: Build/Install the MemoryWorker.js extension
 1. Using the steps in Task 1 and Task 2 above, build and install the memoryworker.js iControl extension. 
-  * Copy the extension from the repo 'extensions' folder to the iWF device
-  * Build the RPM
-  * Copy the RPM to the installation directory
-  * Install the RPM
+  * Copy the extension from the repo 'extensions' folder to the build directory on the iWF device.
+  * Update the {{extension_name}} Postman environment variable.
+  * Build the RPM.
+  * Copy the RPM to the installation directory.
+  * Install the RPM.
 2. Open ```memoryworker.js``` in your text editor. 
   * Look at the contents of the ```onPost``` event. What do you think the POST payload for this worker needs to look like?
   * Look at the contents of the ```onGet``` event. What is the response to a GET going to look like?
 3. from the 'Task 3' folder, send the example POST, 'Memoryworker example POST', to the extension's ```WORKER_URI_PATH```.
 4. Send the example GET with 'Memoryworker Example GET', and note the response.
-5. Change the persisted data and update it. What HTTP methods are available? Why doesn't the version increment? 
+5. Change the persisted data by updating the previous POST request. What HTTP methods are available? Why doesn't the version increment? 
 
 ### Task 4: iControlLX RBAC 
+In the previous exercises, we made requests to iControlLX entension URIs using the iWF admin token. Commonly, tenants will need to make requests to these URIs (as only tenants perform L4-L7 service deployments).
 1. Send the 'View Tenant Permissions' request. Look over the ```resourceMask``` and ```resourceMethod``` values in the ```resources``` array. You can also view this list in the GUI under 'Access Control -> Roles -> {{tenant role}}'
   * What's missing from this list? 
   * What permissions will be needed for a tenant to use the iControlLX workers we've deployed so far?
@@ -58,7 +60,7 @@ Depending on our RBAC strategy, we can add the needed permissions in one of two 
   * Create a seperate role for iControlLX permissions and assign that role to our tenant
   * Add the permissions we need to our existing Tenant role. This can only be done via the API.
 
-2. Look over the POST payload for 'Create dedicated iCLX Role'. The {{iwf_tenant_user}} will be added to this role. Verify that {{extension_name}} environment variable still evaluates to ```MemoryWorker``` for these steps). What permissions are granted?
+2. Look over the POST payload for 'Create dedicated iCLX Role'. The {{iwf_tenant_user}} will be added to this role. What permissions are granted by this request?
 3. Send the 'Test GET permissions' request. Notice that X-F5-Auth-Token header is the _tenant_ token. Evaluate the response.
 4. Send the 'Test POST permissions' request. Why didn't this work?
 5. Delete this role as we'll be using the alternative method to assign permissions. Send the 'Delete dedicated iCLX Role' request. 
@@ -87,17 +89,24 @@ I encourage you to open the iControl LX worker in Notepad++ on the Windows jump 
    * Note the subtle difference in the tenant editable fields of these templates -- the latter (tcp) includes ```ConnectionLimit```.
 4. Verify the POST payload for 'Create HTTP Service' inside the 'HTTP Service Deployment' folder. Make sure you are tailing ```/var/log/restnoded/restnoded.log``` before you send this request. Send the request and verify that the L4-L7 deployment was created.
   * Note that logging is rudimentary for this extension
-5. Send the 'GET HTTP Service' request. Notice the payload returned mimics that of one we'd send to the iControlLX extension and *not* the payload of the service deployment itself.
+5. Send the 'GET HTTP Service (worker)' request. Notice the payload returned mimics that of one we'd send to the iControlLX extension and *not* the payload of the service deployment itself.
   * Look at the ```onGet``` event of the extension to see how this is built.
   * CRUD Functionality for standard HTTP verbs is necessary -- especially if this was the only interface/endpoint being exposed to a tenant (ie. the tenant had no permissions other that to this iControl LX extension).
   * Revisit the request where we altered permissions for this tenant to allow requests to ```/shared/ts2017/*```. Do you see why we also had to add permissions for ```/shared/ts2017/*/*```?
-6. Verify PUT functionality by sending the 'Update HTTP Server' request.
-  * Verify the state of the pool member we disabled.
-7. From the 'TCP Template Service Deployment' folder, send the 'Create TCP Service' request.
-7. Since this iControlLX Extension reads the template from a JSON value in the POST payload (```template```), note the differences in the required ```server-data``` for these requests as opposed to the HTTP example. Remember the inclusion of ```ConnectionLimit```?
-8. Send 'Update TCP Service' request.
-9. The iControlLX worker also implements ```onDelete``` (as it should). Look at the payload for 'Delete Service' then send the request.
-10. It is standard practice to implement an ```/example``` URI for your worker. This will give the consumer some idea what the POST payload will need to look like when calling the endpoint. The iControlLX extensions which use the '/iapps/block' interface (so far just PD developed/provided) provide a comprehensive template. We'll be looking at one of these in the next module.
+6. Send the 'GET HTTP Service (deployment)' request. See the difference in response payload between this request and the last? What destination IP did your service deployment get?
+7. Test your service deployment in a browser. 
+  * appending "/stats" to the L4-L7 deployment endpoint should now show some status data.
+    * ```health.summary``` boolean
+    * ```health.stats.total-member-cnt```
+    * ```health.stats.active-member-cnt```
+    * Connection/traffic information will not be immediately available 
+8. Verify PUT functionality by sending the 'Update HTTP Server' request.
+  * Verify the state of the pool member we disabled (in either the GUI or the 'GET HTTP Service (deployment)' request.
+8. From the 'TCP Template Service Deployment' folder, send the 'Create TCP Service' request.
+9. Since this iControlLX Extension reads the template from a JSON value in the POST payload (```template```), note the differences in the required ```server-data``` for these requests as opposed to the HTTP example. Remember the inclusion of ```ConnectionLimit``` when this service template was created?
+10. Send 'Update TCP Service' request.
+11. The iControlLX worker also implements ```onDelete``` (as it should). Look at the payload for 'Delete Service' then send the request.
+12. It is standard practice to implement an ```/example``` URI for your worker. This will give the consumer some idea what the POST payload will need to look like when calling the endpoint. The iControlLX extensions which use the '/iapps/block' interface (so far just PD developed/provided) provide a comprehensive template. We'll be looking at one of these in the next module.
 
 
 
