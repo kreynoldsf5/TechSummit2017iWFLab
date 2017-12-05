@@ -1,5 +1,7 @@
 # Module 4:  Onboarding Tasks with iControlLX Extensions
 
+<img src="https://github.com/kreynoldsf5/TechSummit2017iWFLab/blob/master/Modules/images/image002.png" alt="Drawing" style="width: 200px;"/>
+
 PD currently provides two iControl LX extensions designed to be used for onbaoarding tasks.
 
 [BIG-IP Settings](https://devcentral.f5.com/wiki/DevOps.HowToSamples_bigip_settings_reset.ashx)
