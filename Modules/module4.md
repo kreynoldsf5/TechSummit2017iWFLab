@@ -33,8 +33,8 @@ The 'BIG-IP Settings' worker provides a simple declarative interface for base on
 
 
 4. 'Find block template ID' will query available block templates and return and array of 1 containing the 'big-ip settings' template. The id/GUID is a unique identifier for the block associated with this worker.
-  * The filter "$filter=state eq 'TEMPLATE' and name eq 'bigip-settings'" returns just templates with name we are looking for.
-  * Use [Query parameters](https://devcentral.f5.com/articles/demystifying-icontrol-rest-part-3-how-to-pass-query-parameters-and-tmsh-options) for iControl where applicable. 
+  * The filter "$filter=state eq 'TEMPLATE' and name eq 'bigip-settings'" returns just blocks that are templates with name we are looking for (so ```items``` should be an array with one entry).
+  * Use [Query parameters](https://devcentral.f5.com/articles/demystifying-icontrol-rest-part-3-how-to-pass-query-parameters-and-tmsh-options) for iControl to your advantage. 
 
 
 5. Use the 'Retrieve block template' request to return an example POST payload we can use for a deployment (an instance of a block that will be passed to bigIpSettingsConfigProcessor.js -- the worker).
