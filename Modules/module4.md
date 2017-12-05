@@ -1,6 +1,6 @@
 # Module 4:  Onboarding Tasks with iControlLX Extensions
 
-<img src="https://github.com/kreynoldsf5/TechSummit2017iWFLab/blob/master/Modules/images/image002.png" alt="Drawing" style="width: 200px;"/>
+<img src="https://github.com/kreynoldsf5/TechSummit2017iWFLab/blob/master/Modules/images/image003.png" alt="Drawing" style="width: 200px;"/>
 
 PD currently provides two iControl LX extensions designed to be used for onbaoarding tasks.
 
