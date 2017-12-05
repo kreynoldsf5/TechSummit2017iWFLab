@@ -98,6 +98,7 @@ We've established a service deployment is simply a POST which specifies the iApp
                 "serverTier": "default"
             },
             ]
+          ...
 ```
 #### JSON values from the iApp
 ```name``` is the variable name in the iApp.
