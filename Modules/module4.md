@@ -23,13 +23,13 @@ The 'BIG-IP Settings' worker provides a simple declarative interface for base on
 
 1. SCP the RPM in '{{repo}}/f5-rest-devops-bigip-settings' to the ```/var/config/rest/downloads``` directory of the iWF device. Installation must be performed from this directory.
 
-2. Send the first request in the Module 4 Postman Collection -'Install BIGIP Settings RPM'. The POST payload for this request is simply the 'operation' and the 'package' path.
+2. Send the first request in the Module 4 Postman Collection -'Install BIGIP Settings RPM'. The POST payload for this request is simply the ```operation``` and the ```package``` path.
   * What was the response code to this POST?
   * How does this HTTP response code differ from a 200?
 
 3. The next request will check the status of the installation task based on the task ```Id``` returned in the install POST. Check ```/var/log/restnoded/restnoded.log``` for troubleshooting purposes. Note how the RPM is installed in ```var/config/rest/iapps/f5-rest-bigip-settings/```. This is simply another iControlLX extension that uses 'block templates' as opposed to a 'WORKER_URI_PATH'. 
   * This interface provides a pattern for persistence
-  * The iControl LX examples in module 3 executed after the HTTP request and generated the HTTP response. What if the task was long running?
+  * The iControl LX examples in module 3 executed after the HTTP request and generated the HTTP response. What if the extension's task was long running (ie. longer than an HTTP request timeout)?
 
 
 4. 'Find block template ID' will query available block templates and return and array of 1 containing the 'big-ip settings' template. The id/GUID is a unique identifier for the block associated with this worker.
