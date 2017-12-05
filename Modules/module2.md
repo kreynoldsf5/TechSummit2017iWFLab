@@ -106,7 +106,7 @@ We've established a service deployment is simply a POST which specifies the iApp
 
 ```isRequired``` is a self explanatory boolean. 
 
-#### JSON values from the service Template
+#### JSON values from the service template
 ```provider``` is the defined default value.
 
 ```providerType``` is used for data input validation.
@@ -115,8 +115,16 @@ We've established a service deployment is simply a POST which specifies the iApp
 
 ```defaultValue``` determines whether the value is tenant editable.
 
+The App Services Integration iApp is _well_ documented. The Reference Guide (https://devcentral.f5.com/wiki/iApp.AppSvcsiApp_refguide.ashx) contains a cononical list of every variable used in the iApp. 
+
 1. Build your own service template and then deploy a L4-L7 service. 
 
-The easiest way would be to build the template through the GUI, perform a deployment as a tenant, and capture the JSON payload. The hard (fun) was 
+The easiest way would be to build the template through the GUI, perform a deployment as a tenant, and capture the JSON payload. Once you've captured the L4-L7 payload, edit the POST in the 'Task 6' folder to perform another service deployment. Be sure to change the name and the virtual server destination address.
+
+The hard (fun) way is to build a template in your text editor. 
+  - Start with the contents of the 'f5-http-lb' service template. Place this in your text editor.
+  - change the value of ```templateName```
+  - Find some values in the template (or in the App Services Integration iApp reference guide) that you want to alter/include in your template. 
+  - Add the relevant service template JSON values (```provider```, ```providerType```, or ```defaultValue```) depending on what you want to change. For example, 
 
 
