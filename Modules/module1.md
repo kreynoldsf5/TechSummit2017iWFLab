@@ -30,13 +30,14 @@ _iWF Administrators do not have the ability to delete L4-L7 services. This *must
 
 In order for iWorkflow to interact with a BIG-IP device it must be discovered. The device discovery process leverages the existing CMI Device Trust infrastructure of BIG-IP (Like BIG-IQ). Credentials are only exchanged during the initial discovery process -- later communication between devices uses device certificate based trust. 
 
-2. Open a browser window to your iWF box. Log in as 'admin'. Go to the 'Devices' pane.
+2. Open a browser window to your iWF box. Log in as 'admin'. Go to the 'Clouds and Services' tab and the 'Devices' pane.
 3. Open Postman and open the collection you previously imported.
 4. Send the first two requests under 'Token Auth' -> 'Admin' folder. These requests will generate an authentication token and increase the token timeout. The following steps could be done with basic authentication but its good practice to use the X-F5-AUTH-TOKEN header. 
-4. Examine the POST payload for the 'Discover BIGIP-A Device' request. Send the request. Note the status in the response body. This is a standard 'tasks' based pattern that is commonly used.
+4. Examine the POST payload for the 'Discover BIGIP-A Device' request. Send the request. Note the ```state``` in the response body. Once the ```state``` is ```Active``` the device is ready to be used by iWF.
 5. Use 'Check Discovered Device State' to determine when the device discovery procedure finishes or fails. Follow along in the iWF GUI or ```tailf /var/log/restjavad.0.log``` to verify the device has been discovered.
 6. Craft the appropiate POST payload to discover BIGIP-2. I've included a Postman test to save the uuid to an environment variable for later. We'll use this device in Module 4.
 7. Use the 'Get Discovered Devices' request to look at all device iWF has discovered.
+8. Check the 'Devices' pane in the GUI. What information is avaiable here that was not part of the previous HTTP response?
 
 
 ## Task 2: Create a Tenant
@@ -48,7 +49,7 @@ All service deployments are performed by tenants. A tenant is an object which is
   * Click the 'Tenant' pane.
   * Click the plus sign.
   * Give the tenant a name. We'll not assign a cloud at this time.
-  * Notice a 'Role' was created when you created the tenant.
+  * Look at the 'Roles' pane. Inspect the role that was automatically created upon tenant creation.
 
 2. Create a user in the GUI.
   * Under 'Clouds and Services' click the 'Users' pane.
@@ -68,13 +69,15 @@ All service deployments are performed by tenants. A tenant is an object which is
 
 
 ## Task 3: Create a Connector
-A connector is a target for service deployments made up of BIG-IP(s). In our case this will be a single BIG-IP device but this would typically be a BIG-IP device service cluster. 
+A connector is a target for L4-L7 service deployments made up of BIG-IP(s). In our case this will be a single BIG-IP device but this would typically be a BIG-IP device service cluster. 
 
 1. Study the POST payload for 'Create Local Connector'. Where did the link in the ```deviceReferences``` JSON array come from?
 
-2. In the GUI, the connector you just created is under the 'Clouds' pane. There is history here dating back to Big-IQ Cloud days. 
+2. In the GUI, the connector you just created is under the 'Clouds' pane. There is history here dating back to Big-IQ Cloud days.
 
-3. Use the followup GET request, 'Get Local Connectors', to find the ```connectorId``` and the ```deviceGroupReference``` ```link``` of the returned connector. Note the GUID naming scheme (connector+{{guid}} in this case).
+3. Send the 'Create Unused Local Connector' request. Notice it has the same ```deviceReferences``` JSON value.
+
+3. Use the followup GET request, 'Get Local Connectors', to list the connectors. These items have the same name, description, and ```deviceReference```. The unique value for a connector is the ```connectorId```. 
 
 4. Finally, assign the connector to the tenant you created earlier with 'Assign Connector to Tenant'. The 'cloudConnectorReferences' JSON array could be used to assign multiple connectors to a given tenant.
 
