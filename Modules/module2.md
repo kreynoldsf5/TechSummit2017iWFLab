@@ -100,7 +100,10 @@ We've established a service deployment is simply a POST which specifies the iApp
             ]
           ...
 ```
-#### JSON values from the iApp
+
+Let's decipher this by differentiating between the JSON values from the iApp and the values added by the service template.
+
+#### JSON values from the iApp:
 ```name``` is the variable name in the iApp.
 
 ```description``` is displayed in the GUI. 
@@ -109,7 +112,7 @@ We've established a service deployment is simply a POST which specifies the iApp
 
 ```isRequired``` is a self explanatory boolean. 
 
-#### JSON values added for the service template
+#### JSON values added for the service template:
 ```provider``` is the defined default value.
 
 ```providerType``` is used for data input validation.
